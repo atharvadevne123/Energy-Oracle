@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: energy-oracle-api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://oracle:oracle_pass@db:5432/energy_oracle
+      - LOG_LEVEL=INFO
+      - RATE_LIMIT_PER_MINUTE=60
+      - RMSE_THRESHOLD=20.0
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - model_data:/app
+    networks:
+      - oracle_net
+
+  db:
+    image: postgres:15-alpine
+    container_name: energy-oracle-db
+    environment:
+      POSTGRES_USER: oracle
+      POSTGRES_PASSWORD: oracle_pass
+      POSTGRES_DB: energy_oracle
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oracle -d energy_oracle"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - oracle_net
+
+volumes:
+  pg_data:
+  model_data:
+
+networks:
+  oracle_net:
+    driver: bridge
