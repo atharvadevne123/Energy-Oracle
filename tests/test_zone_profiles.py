@@ -41,7 +41,7 @@ def test_temperature_sensitivity():
 
 
 def test_unknown_zone_falls_back_to_mixed():
-    from app.zone_profiles import get_zone_profile, MIXED
+    from app.zone_profiles import MIXED, get_zone_profile
 
     profile = get_zone_profile("unknown_zone")
     assert profile.name == MIXED.name

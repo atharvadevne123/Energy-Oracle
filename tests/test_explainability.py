@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
-import pytest
-
 
 def test_get_feature_importances_returns_dict(tmp_path, monkeypatch):
     from app import model as m
     monkeypatch.setattr(m, "MODEL_PATH", tmp_path / "model.joblib")
     monkeypatch.setattr(m, "METRICS_PATH", tmp_path / "metrics.json")
-    from app.model import generate_synthetic_data, train_model, load_model
     from app.explainability import get_feature_importances
+    from app.model import generate_synthetic_data, load_model, train_model
 
     df, y = generate_synthetic_data(n_samples=300)
     train_model(df, y, cv_folds=2)
@@ -24,8 +22,8 @@ def test_importances_sum_to_one(tmp_path, monkeypatch):
     from app import model as m
     monkeypatch.setattr(m, "MODEL_PATH", tmp_path / "model.joblib")
     monkeypatch.setattr(m, "METRICS_PATH", tmp_path / "metrics.json")
-    from app.model import generate_synthetic_data, train_model, load_model
     from app.explainability import get_feature_importances
+    from app.model import generate_synthetic_data, load_model, train_model
 
     df, y = generate_synthetic_data(n_samples=300)
     train_model(df, y, cv_folds=2)
@@ -50,9 +48,9 @@ def test_explain_prediction_structure(tmp_path, monkeypatch):
     from app import model as m
     monkeypatch.setattr(m, "MODEL_PATH", tmp_path / "model.joblib")
     monkeypatch.setattr(m, "METRICS_PATH", tmp_path / "metrics.json")
-    from app.model import generate_synthetic_data, train_model, load_model
-    from app.explainability import get_feature_importances, explain_prediction
+    from app.explainability import explain_prediction, get_feature_importances
     from app.features import single_row_to_df
+    from app.model import generate_synthetic_data, load_model, train_model
 
     df, y = generate_synthetic_data(n_samples=300)
     train_model(df, y, cv_folds=2)

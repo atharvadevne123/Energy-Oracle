@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
+import argparse
+import json
 import statistics
-import sys
 import time
 import urllib.request
-import json
-import argparse
 
 DEFAULT_URL = "http://localhost:8000/api/v1/predict"
 DEFAULT_N = 50
@@ -35,7 +34,7 @@ def run_benchmark(url: str, n: int) -> dict:
     latencies: list[float] = []
     errors = 0
 
-    for i in range(n):
+    for _i in range(n):
         req = urllib.request.Request(
             url, data=PAYLOAD, method="POST",
             headers={"Content-Type": "application/json"},

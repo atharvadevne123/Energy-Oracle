@@ -14,7 +14,7 @@ def _reset_metrics():
 
 
 def test_increment_counter():
-    from app.metrics_store import increment, get_counter
+    from app.metrics_store import get_counter, increment
 
     increment("predictions_total")
     increment("predictions_total")
@@ -22,7 +22,7 @@ def test_increment_counter():
 
 
 def test_counter_with_labels():
-    from app.metrics_store import increment, get_counter
+    from app.metrics_store import get_counter, increment
 
     increment("requests", labels={"zone": "residential"})
     increment("requests", labels={"zone": "commercial"})

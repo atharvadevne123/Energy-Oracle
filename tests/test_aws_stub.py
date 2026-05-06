@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 
 def test_upload_missing_model_returns_error(tmp_path):
     from app.aws_stub import upload_model

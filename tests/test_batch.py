@@ -42,7 +42,7 @@ def test_batch_predict_multiple_records():
 
 
 def test_batch_predict_exceeds_max_raises():
-    from app.batch import batch_predict, MAX_BATCH_SIZE
+    from app.batch import MAX_BATCH_SIZE, batch_predict
 
     records = [
         {"zone": "mixed", "hour": 0, "day_of_week": 0, "temperature": 15.0, "humidity": 50.0}

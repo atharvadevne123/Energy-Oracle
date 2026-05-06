@@ -25,7 +25,6 @@ class CorrelationIDMiddleware:
 
     async def __call__(self, scope: Any, receive: Any, send: Any) -> None:
         if scope["type"] == "http":
-            from starlette.datastructures import MutableHeaders
             from starlette.types import Message
 
             headers = dict(scope["headers"])

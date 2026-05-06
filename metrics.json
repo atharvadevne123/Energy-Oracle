@@ -1,0 +1,9 @@
+{
+  "run_id": "9a4a2f31-a399-4bc5-9189-94bf529e9f35",
+  "rmse_mean": 7.631860891190838,
+  "rmse_std": 0.3101810620528418,
+  "n_samples": 5000,
+  "n_features": 26,
+  "model_version": "1.0.0",
+  "cv_folds": 5
+}

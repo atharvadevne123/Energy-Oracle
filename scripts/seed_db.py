@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import logging
-import os
 import uuid
 
 logging.basicConfig(level=logging.INFO)
@@ -19,6 +18,7 @@ def seed(n: int = 200) -> None:
         n: Number of records to insert.
     """
     import numpy as np
+
     from app.database import SessionLocal, init_db
     from app.monitoring import log_prediction
 

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 
 def test_cache_hit_on_repeat_call():
     from app.cache import cached_predict, clear_cache

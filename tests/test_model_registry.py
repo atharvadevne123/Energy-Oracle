@@ -13,7 +13,7 @@ def registry_path(tmp_path, monkeypatch):
 
 
 def test_register_creates_entry(registry_path):
-    from app.model_registry import register_model, load_registry
+    from app.model_registry import load_registry, register_model
 
     register_model("1.0.0", {"rmse_mean": 5.0}, "model.joblib")
     registry = load_registry()
@@ -27,7 +27,7 @@ def test_load_empty_registry(registry_path):
 
 
 def test_promote_sets_production(registry_path):
-    from app.model_registry import register_model, promote, get_production_model
+    from app.model_registry import get_production_model, promote, register_model
 
     register_model("1.0.0", {}, "model.joblib")
     register_model("2.0.0", {}, "model_v2.joblib")
@@ -38,7 +38,7 @@ def test_promote_sets_production(registry_path):
 
 
 def test_promote_demotes_others(registry_path):
-    from app.model_registry import register_model, promote, load_registry
+    from app.model_registry import load_registry, promote, register_model
 
     register_model("1.0.0", {}, "m1.joblib", promoted=True)
     register_model("2.0.0", {}, "m2.joblib")
