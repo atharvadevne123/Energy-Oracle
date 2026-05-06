@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "energy-oracle"
+version = "1.0.0"
+description = "Real-time energy consumption prediction API with LightGBM ensemble and drift detection"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Reflective Lantern", email = "devneatharva@gmail.com" }]
+keywords = ["energy", "machine-learning", "forecasting", "fastapi", "lightgbm"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Framework :: FastAPI",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "lightgbm>=4.5",
+    "scikit-learn>=1.5",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "scipy>=1.14",
+    "sqlalchemy>=2.0",
+    "joblib>=1.4",
+    "pydantic>=2.10",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "httpx"]
+airflow = ["apache-airflow>=2.9"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*", "pipelines*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
+ignore = ["E501", "B008", "B904"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+filterwarnings = ["ignore::DeprecationWarning"]
