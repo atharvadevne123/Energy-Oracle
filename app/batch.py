@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 MAX_BATCH_SIZE = 1000
 
+__all__ = ['BatchPredictRequest', 'batch_predict', 'MAX_BATCH_SIZE']
+
 
 class BatchPredictRequest:
     """Container for a batch prediction job."""

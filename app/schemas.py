@@ -7,6 +7,13 @@ from typing import Any
 from pydantic import BaseModel, Field, field_validator
 
 
+__all__ = [
+    'PredictRequest', 'PredictResponse', 'HealthResponse', 'MetricsResponse',
+    'DriftResponse', 'BatchPredictItem', 'BatchPredictRequest',
+    'BatchPredictResultItem', 'BatchPredictResponse', 'VersionResponse',
+]
+
+
 class PredictRequest(BaseModel):
     """Input schema for energy consumption prediction endpoint."""
 
