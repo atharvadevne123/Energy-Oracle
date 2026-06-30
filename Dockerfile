@@ -1,5 +1,11 @@
 FROM python:3.11-slim
 
+LABEL org.opencontainers.image.title="Energy-Oracle" \
+      org.opencontainers.image.description="Real-time energy consumption prediction API" \
+      org.opencontainers.image.version="1.1.0" \
+      org.opencontainers.image.authors="devneatharva@gmail.com" \
+      org.opencontainers.image.source="https://github.com/atharvadevne123/reflective-lantern"
+
 WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
