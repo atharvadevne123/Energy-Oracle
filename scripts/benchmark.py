@@ -20,7 +20,7 @@ PAYLOAD = json.dumps({
 }).encode()
 
 
-def run_benchmark(url: str, n: int) -> dict:
+def run_benchmark(url: str, n: int) -> dict[str, object]:
     """
     Send n POST requests and collect latency statistics.
 
@@ -32,7 +32,7 @@ def run_benchmark(url: str, n: int) -> dict:
         Dict with min, max, mean, p95, p99 latencies in milliseconds.
     """
     latencies: list[float] = []
-    errors = 0
+    errors: int = 0
 
     for _i in range(n):
         req = urllib.request.Request(
