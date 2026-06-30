@@ -1,4 +1,4 @@
-"""FastAPI application — /api/v1/predict, /api/v1/health, /api/v1/metrics, /api/v1/drift."""
+"""FastAPI application — /api/v1/predict, /api/v1/health, /api/v1/metrics, /api/v1/drift, /api/v1/batch, /api/v1/version."""
 
 from __future__ import annotations
 
@@ -11,14 +11,24 @@ from typing import Annotated, Any
 
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
 
+from app.batch import batch_predict
 from app.config import settings
 from app.database import get_db, init_db
 from app.features import single_row_to_df
+from app.health import full_health_report
 from app.model import load_metrics, predict
 from app.monitoring import log_prediction, run_drift_check, summarise_predictions
+from app.schemas import (
+    BatchPredictRequest,
+    BatchPredictResponse,
+    HealthResponse,
+    MetricsResponse,
+    PredictRequest,
+    PredictResponse,
+    VersionResponse,
+)
 
 logging.basicConfig(
     level=os.getenv("LOG_LEVEL", "INFO"),
@@ -90,56 +100,6 @@ async def rate_limit_middleware(request: Request, call_next):
         )
     _rate_store[client_ip].append(now)
     return await call_next(request)
-
-
-# ---------------------------------------------------------------------------
-# Request / Response schemas
-# ---------------------------------------------------------------------------
-
-
-class PredictRequest(BaseModel):
-    """Input schema for energy consumption prediction."""
-
-    zone: str = Field(
-        ...,
-        description="Zone type: residential | commercial | industrial | mixed",
-        examples=["residential"],
-    )
-    hour: int = Field(..., ge=0, le=23, description="Hour of day (0–23)")
-    day_of_week: int = Field(..., ge=0, le=6, description="Day of week (0=Mon, 6=Sun)")
-    temperature: float = Field(..., ge=-20.0, le=50.0, description="Temperature in °C")
-    humidity: float = Field(..., ge=0.0, le=100.0, description="Relative humidity (%)")
-
-    @field_validator("zone")
-    @classmethod
-    def validate_zone(cls, v: str) -> str:
-        allowed = {"residential", "commercial", "industrial", "mixed"}
-        v = v.lower().strip()
-        if v not in allowed:
-            raise ValueError(f"zone must be one of {sorted(allowed)}")
-        return v
-
-
-class PredictResponse(BaseModel):
-    """Prediction output."""
-
-    predicted_kwh: float = Field(..., description="Predicted energy consumption in kWh")
-    zone: str
-    hour: int
-    day_of_week: int
-    model_version: str
-    correlation_id: str
-
-
-class HealthResponse(BaseModel):
-    status: str
-    version: str
-    uptime_seconds: float
-
-
-class MetricsResponse(BaseModel):
-    training_metrics: dict[str, Any]
-    prediction_summary: dict[str, Any]
 
 
 _start_time = time.time()
@@ -241,3 +201,56 @@ def drift_endpoint(db: Annotated[Session, Depends(get_db)]) -> dict[str, Any]:
     Requires at least 60 logged predictions to produce meaningful results.
     """
     return run_drift_check(db)
+
+
+@app.get(
+    "/api/v1/version",
+    response_model=VersionResponse,
+    summary="Application version",
+    tags=["Operations"],
+)
+def version_endpoint() -> VersionResponse:
+    """Return application and model version metadata."""
+    from app.model import MODEL_VERSION
+
+    return VersionResponse(
+        name=settings.app_name,
+        version=settings.app_version,
+        model_version=MODEL_VERSION,
+    )
+
+
+@app.post(
+    "/api/v1/batch",
+    response_model=BatchPredictResponse,
+    summary="Batch predict energy consumption",
+    tags=["Prediction"],
+    status_code=status.HTTP_200_OK,
+)
+def batch_endpoint(body: BatchPredictRequest) -> BatchPredictResponse:
+    """
+    Run bulk energy consumption predictions for up to 1000 records.
+
+    Builds a single vectorized feature matrix for efficiency.
+    """
+    records = [r.model_dump() for r in body.records]
+    results = batch_predict(records)
+    successful = sum(1 for r in results if r.get("error") is None)
+    return BatchPredictResponse(results=results, total=len(results), successful=successful)
+
+
+@app.get(
+    "/api/v1/health/deep",
+    summary="Deep health check with component status",
+    tags=["Operations"],
+)
+def health_deep_endpoint() -> dict[str, Any]:
+    """
+    Return detailed health status for all components (database, model file).
+
+    Use /api/v1/health for the lightweight liveness check.
+    """
+    return full_health_report(
+        db_url=settings.database_url,
+        model_path=settings.model_path,
+    )
