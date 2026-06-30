@@ -6,7 +6,7 @@ import json
 import logging
 import os
 import uuid
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ def retrain(n_samples: int = 5000, cv_folds: int = 5) -> dict:
     pipe, metrics = train_model(df, y, cv_folds=cv_folds)
 
     metrics["run_id"] = run_id
-    metrics["retrained_at"] = datetime.utcnow().isoformat()
+    metrics["retrained_at"] = datetime.now(tz=UTC).isoformat()
 
     log_path = Path("retrain_history.json")
     history: list[dict] = []
