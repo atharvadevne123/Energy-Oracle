@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 
-def retrain(n_samples: int = 5000, cv_folds: int = 5) -> dict:
+def retrain(n_samples: int = 5000, cv_folds: int = 5) -> dict[str, object]:
     """
     Pull latest data (synthetic fallback), retrain ensemble, persist metrics.
 
@@ -35,7 +35,7 @@ def retrain(n_samples: int = 5000, cv_folds: int = 5) -> dict:
     metrics["retrained_at"] = datetime.now(tz=UTC).isoformat()
 
     log_path = Path("retrain_history.json")
-    history: list[dict] = []
+    history: list[dict[str, object]] = []
     if log_path.exists():
         history = json.loads(log_path.read_text())
     history.append(metrics)
