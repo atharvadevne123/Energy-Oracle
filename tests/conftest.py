@@ -60,6 +60,28 @@ def sample_predict_payload():
 
 
 @pytest.fixture
+def commercial_payload():
+    return {
+        "zone": "commercial",
+        "hour": 10,
+        "day_of_week": 2,
+        "temperature": 22.0,
+        "humidity": 55.0,
+    }
+
+
+@pytest.fixture
+def industrial_payload():
+    return {
+        "zone": "industrial",
+        "hour": 14,
+        "day_of_week": 3,
+        "temperature": 28.0,
+        "humidity": 45.0,
+    }
+
+
+@pytest.fixture
 def reference_series():
     import numpy as np
     rng = np.random.default_rng(0)
@@ -78,3 +100,11 @@ def current_series_drifted():
     import numpy as np
     rng = np.random.default_rng(2)
     return rng.normal(80, 15, 50).tolist()
+
+
+@pytest.fixture
+def all_zones_batch_payload():
+    return [
+        {"zone": z, "hour": 12, "day_of_week": 2, "temperature": 20.0, "humidity": 50.0}
+        for z in ("residential", "commercial", "industrial", "mixed")
+    ]
