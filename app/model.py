@@ -26,6 +26,8 @@ MODEL_PATH = Path(os.getenv("MODEL_PATH", "model.joblib"))
 METRICS_PATH = Path(os.getenv("METRICS_PATH", "metrics.json"))
 MODEL_VERSION = "1.0.0"
 
+_model_cache: dict[str, Pipeline] | None = None
+
 
 def _build_pipeline(model: Any) -> Pipeline:
     """Wrap a regressor in a scaling pipeline."""
@@ -124,6 +126,9 @@ def train_model(
     joblib.dump({"lgbm": lgbm_pipe, "rf": rf_pipe}, MODEL_PATH)
     METRICS_PATH.write_text(json.dumps(metrics, indent=2))
 
+    global _model_cache
+    _model_cache = {"lgbm": lgbm_pipe, "rf": rf_pipe}
+
     logger.info(
         "Training complete — RMSE %.4f ± %.4f", metrics["rmse_mean"], metrics["rmse_std"]
     )
@@ -131,12 +136,18 @@ def train_model(
 
 
 def load_model() -> dict[str, Pipeline]:
-    """Load persisted ensemble from disk."""
+    """Return the in-process model cache, loading from disk only on first call."""
+    global _model_cache
+    if _model_cache is not None:
+        return _model_cache
     if not MODEL_PATH.exists():
         logger.info("No model found — training on synthetic data")
         df, y = generate_synthetic_data()
         train_model(df, y)
-    return joblib.load(MODEL_PATH)
+        return _model_cache  # type: ignore[return-value]
+    _model_cache = joblib.load(MODEL_PATH)
+    logger.info("Model loaded from %s", MODEL_PATH)
+    return _model_cache
 
 
 def predict(features: pd.DataFrame, blend_alpha: float = 0.7) -> float:
