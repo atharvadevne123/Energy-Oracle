@@ -12,6 +12,14 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 logger = logging.getLogger(__name__)
 
+__all__ = [
+    "ZONE_CATEGORIES", "ZONE_BASELINES", "FEATURE_COLUMNS",
+    "add_time_features", "add_lag_features", "add_rolling_features",
+    "add_ratio_features", "encode_zone", "build_feature_matrix",
+    "build_sklearn_pipeline", "single_row_to_df",
+]
+
+
 ZONE_CATEGORIES = ["residential", "commercial", "industrial", "mixed"]
 
 # Pre-fitted LabelEncoder singleton — avoids re-instantiation on every inference call
