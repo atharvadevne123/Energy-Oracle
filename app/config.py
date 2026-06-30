@@ -5,6 +5,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+__all__ = ["Settings", "settings"]
+
 
 class Settings:
     """Application settings loaded from environment variables."""
@@ -17,9 +19,12 @@ class Settings:
     rmse_threshold: float = float(os.getenv("RMSE_THRESHOLD", "20.0"))
     model_version: str = os.getenv("MODEL_VERSION", "1.0.0")
     app_name: str = "Energy-Oracle"
-    app_version: str = "1.0.0"
+    app_version: str = "1.1.0"
     blend_alpha: float = float(os.getenv("BLEND_ALPHA", "0.7"))
     cors_origins: list[str] = os.getenv("CORS_ORIGINS", "*").split(",")
+    max_batch_size: int = int(os.getenv("MAX_BATCH_SIZE", "1000"))
+    enable_json_logs: bool = os.getenv("ENABLE_JSON_LOGS", "false").lower() == "true"
+    drift_window_size: int = int(os.getenv("DRIFT_WINDOW_SIZE", "100"))
 
 
 settings = Settings()
