@@ -10,12 +10,11 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['cached_predict', 'clear_cache', 'cache_stats']
+__all__ = ['cached_predict', 'clear_cache', 'cache_stats', 'CACHE_MAX_SIZE']
 
-
+CACHE_MAX_SIZE = 512
 
 _prediction_cache: OrderedDict[str, float] = OrderedDict()
-_CACHE_MAX_SIZE = 512
 
 
 def _make_cache_key(data: dict[str, Any]) -> str:
@@ -29,7 +28,7 @@ def cached_predict(data: dict[str, Any], predict_fn: Any) -> tuple[float, bool]:
     Return a cached prediction if available, otherwise call predict_fn.
 
     Uses an OrderedDict to implement true LRU eviction — the least recently
-    used entry is removed when the cache exceeds _CACHE_MAX_SIZE.
+    used entry is removed when the cache exceeds CACHE_MAX_SIZE.
 
     Returns:
         Tuple of (predicted_kwh, cache_hit).
@@ -43,7 +42,7 @@ def cached_predict(data: dict[str, Any], predict_fn: Any) -> tuple[float, bool]:
     result = predict_fn(data)
     _prediction_cache[key] = result
     _prediction_cache.move_to_end(key)
-    if len(_prediction_cache) > _CACHE_MAX_SIZE:
+    if len(_prediction_cache) > CACHE_MAX_SIZE:
         evicted_key, _ = _prediction_cache.popitem(last=False)
         logger.debug("LRU eviction key=%s", evicted_key)
     logger.debug("Cache miss key=%s — stored result %.4f", key, result)
@@ -59,4 +58,4 @@ def clear_cache() -> int:
 
 def cache_stats() -> dict[str, int]:
     """Return current cache utilisation."""
-    return {"size": len(_prediction_cache), "max_size": _CACHE_MAX_SIZE}
+    return {"size": len(_prediction_cache), "max_size": CACHE_MAX_SIZE}
