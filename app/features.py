@@ -14,6 +14,10 @@ logger = logging.getLogger(__name__)
 
 ZONE_CATEGORIES = ["residential", "commercial", "industrial", "mixed"]
 
+# Pre-fitted LabelEncoder singleton — avoids re-instantiation on every inference call
+_ZONE_ENCODER: LabelEncoder = LabelEncoder()
+_ZONE_ENCODER.fit(ZONE_CATEGORIES)
+
 # Baseline consumption per zone (kWh reference for ratio features)
 ZONE_BASELINES: dict[str, float] = {
     "residential": 25.0,
@@ -75,11 +79,9 @@ def add_ratio_features(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def encode_zone(df: pd.DataFrame) -> pd.DataFrame:
-    """Ordinal-encode the zone column."""
+    """Ordinal-encode the zone column using the pre-fitted module-level encoder."""
     df = df.copy()
-    le = LabelEncoder()
-    le.fit(ZONE_CATEGORIES)
-    df["zone_encoded"] = le.transform(
+    df["zone_encoded"] = _ZONE_ENCODER.transform(
         df["zone"].where(df["zone"].isin(ZONE_CATEGORIES), other="mixed")
     )
     return df
