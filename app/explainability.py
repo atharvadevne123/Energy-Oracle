@@ -11,6 +11,8 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 
+__all__ = ['get_feature_importances', 'top_k_features', 'explain_prediction']
+
 def get_feature_importances(model_ensemble: dict[str, Any]) -> dict[str, float]:
     """
     Extract normalised feature importances from the LightGBM component.
@@ -77,3 +79,4 @@ def explain_prediction(
             "importance": round(imp, 4),
         })
     return breakdown
+

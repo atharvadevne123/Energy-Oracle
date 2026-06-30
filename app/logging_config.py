@@ -9,6 +9,8 @@ from datetime import UTC, datetime
 from typing import Any
 
 
+__all__ = ['JsonFormatter', 'configure_logging']
+
 class JsonFormatter(logging.Formatter):
     """Emit log records as JSON lines for log-aggregation pipelines."""
 
@@ -49,3 +51,4 @@ def configure_logging(level: str = "INFO", *, json_logs: bool = False) -> None:
     # Silence noisy third-party loggers
     for noisy in ("uvicorn.access", "lightgbm"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
+

@@ -9,6 +9,8 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+
+__all__ = ['check_database', 'check_model', 'full_health_report']
 _start_time = time.time()
 
 
@@ -60,3 +62,4 @@ def full_health_report(db_url: str, model_path: str | Path) -> dict[str, Any]:
         "version": "1.0.0",
         "components": components,
     }
+
