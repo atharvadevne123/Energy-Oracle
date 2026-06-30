@@ -7,8 +7,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['validate_predict_input']
-
+__all__ = ['validate_predict_input', 'validate_batch_input', 'VALID_ZONES']
 
 
 VALID_ZONES = frozenset({"residential", "commercial", "industrial", "mixed"})
@@ -16,6 +15,8 @@ HOUR_RANGE = range(0, 24)
 DOW_RANGE = range(0, 7)
 TEMP_RANGE = (-20.0, 50.0)
 HUMIDITY_RANGE = (0.0, 100.0)
+
+REQUIRED_FIELDS = frozenset({"zone", "hour", "day_of_week", "temperature", "humidity"})
 
 
 def validate_predict_input(data: dict[str, Any]) -> list[str]:
@@ -26,6 +27,11 @@ def validate_predict_input(data: dict[str, Any]) -> list[str]:
         List of validation error messages (empty when input is valid).
     """
     errors: list[str] = []
+
+    missing = REQUIRED_FIELDS - data.keys()
+    if missing:
+        errors.append(f"Missing required fields: {sorted(missing)}.")
+        return errors
 
     zone = data.get("zone", "")
     if zone not in VALID_ZONES:
@@ -50,3 +56,18 @@ def validate_predict_input(data: dict[str, Any]) -> list[str]:
     if errors:
         logger.debug("Validation errors: %s", errors)
     return errors
+
+
+def validate_batch_input(records: list[dict[str, Any]]) -> dict[int, list[str]]:
+    """
+    Validate every record in a batch.
+
+    Returns:
+        Dict mapping record index to list of error messages for that record.
+        Records with no errors are omitted.
+    """
+    return {
+        i: errs
+        for i, rec in enumerate(records)
+        if (errs := validate_predict_input(rec))
+    }
