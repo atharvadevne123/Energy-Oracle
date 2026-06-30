@@ -58,14 +58,14 @@ def _make_rf() -> RandomForestRegressor:
     )
 
 
-def generate_synthetic_data(n_samples: int = 5000) -> tuple[pd.DataFrame, pd.Series]:
+def generate_synthetic_data(n_samples: int = 5000, seed: int = 42) -> tuple[pd.DataFrame, pd.Series]:
     """
     Generate realistic synthetic energy consumption data.
 
     Consumption is driven by: zone baseline + temperature effect +
     peak-hour surge + random noise.
     """
-    rng = np.random.default_rng(42)
+    rng = np.random.default_rng(seed)
     zones = rng.choice(["residential", "commercial", "industrial", "mixed"], n_samples)
     hours = rng.integers(0, 24, n_samples)
     days = rng.integers(0, 7, n_samples)
