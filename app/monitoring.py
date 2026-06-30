@@ -14,6 +14,8 @@ from app.database import DriftEvent, PredictionLog
 logger = logging.getLogger(__name__)
 
 # Minimum window size required for a meaningful KS-test
+__all__ = ["compute_drift", "log_prediction", "get_recent_predictions", "run_drift_check", "summarise_predictions", "MIN_WINDOW_FOR_DRIFT"]
+
 MIN_WINDOW_FOR_DRIFT = 30
 
 
