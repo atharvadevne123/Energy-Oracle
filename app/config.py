@@ -19,6 +19,7 @@ class Settings:
     app_name: str = "Energy-Oracle"
     app_version: str = "1.0.0"
     blend_alpha: float = float(os.getenv("BLEND_ALPHA", "0.7"))
+    cors_origins: list[str] = os.getenv("CORS_ORIGINS", "*").split(",")
 
 
 settings = Settings()
