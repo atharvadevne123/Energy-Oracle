@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import logging
 import os
-from datetime import datetime
+from datetime import UTC, datetime
 
-from sqlalchemy import Column, DateTime, Float, Integer, String, create_engine
+from sqlalchemy import Column, DateTime, Float, Index, Integer, String, create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,11 @@ class PredictionLog(Base):
     humidity = Column(Float, nullable=False)
     predicted_kwh = Column(Float, nullable=False)
     model_version = Column(String(32), nullable=False, default="1.0.0")
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC), nullable=False)
+
+    __table_args__ = (
+        Index("ix_prediction_logs_zone_created_at", "zone", "created_at"),
+    )
 
 
 class TrainingRun(Base):
@@ -55,7 +59,7 @@ class TrainingRun(Base):
     n_samples = Column(Integer, nullable=False)
     n_features = Column(Integer, nullable=False)
     model_version = Column(String(32), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC), nullable=False)
 
 
 class DriftEvent(Base):
@@ -69,7 +73,7 @@ class DriftEvent(Base):
     p_value = Column(Float, nullable=False)
     drift_detected = Column(Integer, nullable=False)  # 0/1 boolean
     window_size = Column(Integer, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC), nullable=False)
 
 
 def init_db() -> None:
