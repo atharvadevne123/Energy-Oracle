@@ -47,6 +47,12 @@ class PredictionLog(Base):
         Index("ix_prediction_logs_zone_created_at", "zone", "created_at"),
     )
 
+    def __repr__(self) -> str:
+        return (
+            f"<PredictionLog id={self.id} zone={self.zone!r} "
+            f"hour={self.hour} kwh={self.predicted_kwh}>"
+        )
+
 
 class TrainingRun(Base):
     """Records each model training event with metrics."""
