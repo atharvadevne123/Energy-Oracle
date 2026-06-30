@@ -26,6 +26,8 @@ MODEL_PATH = Path(os.getenv("MODEL_PATH", "model.joblib"))
 METRICS_PATH = Path(os.getenv("METRICS_PATH", "metrics.json"))
 MODEL_VERSION = "1.0.0"
 
+__all__ = ["generate_synthetic_data", "train_model", "load_model", "predict", "load_metrics", "MODEL_PATH", "MODEL_VERSION"]
+
 _model_cache: dict[str, Pipeline] | None = None
 
 
