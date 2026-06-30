@@ -10,6 +10,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+ZONES: list[str] = ["residential", "commercial", "industrial", "mixed"]
+
+
 def seed(n: int = 200) -> None:
     """
     Insert n synthetic prediction records into the database.
@@ -26,7 +29,7 @@ def seed(n: int = 200) -> None:
     rng = np.random.default_rng(99)
     db = SessionLocal()
 
-    zones = ["residential", "commercial", "industrial", "mixed"]
+    zones: list[str] = ZONES
     try:
         for _ in range(n):
             log_prediction(
