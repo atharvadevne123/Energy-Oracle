@@ -16,6 +16,10 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+__all__ = ['start_run']
+
+
+
 _LOG_PATH = Path("mlflow_runs.json")
 
 

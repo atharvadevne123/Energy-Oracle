@@ -9,6 +9,10 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+__all__ = ['increment', 'record_latency', 'get_counter', 'percentile', 'summary', 'reset']
+
+
+
 # In-process counters (replace with prometheus_client in production)
 _counters: dict[str, int] = defaultdict(int)
 _histograms: dict[str, list[float]] = defaultdict(list)
