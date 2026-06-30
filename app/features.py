@@ -13,7 +13,7 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 logger = logging.getLogger(__name__)
 
 __all__ = [
-    "ZONE_CATEGORIES", "ZONE_BASELINES", "FEATURE_COLUMNS",
+    "ZONE_CATEGORIES", "ZONE_BASELINES", "FEATURE_COLUMNS", "N_FEATURES",
     "add_time_features", "add_lag_features", "add_rolling_features",
     "add_ratio_features", "encode_zone", "build_feature_matrix",
     "build_sklearn_pipeline", "single_row_to_df",
@@ -95,7 +95,7 @@ def encode_zone(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-FEATURE_COLUMNS = [
+FEATURE_COLUMNS: list[str] = [
     "hour_sin", "hour_cos", "dow_sin", "dow_cos",
     "is_weekend", "is_peak_hour", "is_off_peak",
     "temperature", "humidity",
@@ -107,6 +107,9 @@ FEATURE_COLUMNS = [
     "temp_rolling_mean_6", "temp_rolling_std_6",
     "temp_rolling_mean_12", "temp_rolling_std_12",
 ]
+
+
+N_FEATURES: int = len(FEATURE_COLUMNS)
 
 
 def build_feature_matrix(df: pd.DataFrame) -> pd.DataFrame:
