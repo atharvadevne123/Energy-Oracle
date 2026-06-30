@@ -11,6 +11,8 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 logger = logging.getLogger(__name__)
 
+__all__ = ["Base", "PredictionLog", "TrainingRun", "DriftEvent", "SessionLocal", "engine", "init_db", "get_db"]
+
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./energy_oracle.db")
 
 engine = create_engine(
