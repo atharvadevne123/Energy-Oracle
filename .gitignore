@@ -43,3 +43,23 @@ htmlcov/
 
 # Alembic runtime
 alembic/__pycache__/
+
+# Reports
+*.pdf
+retrain_history.json
+
+# Type checking
+.mypy_cache/
+*.pyi
+
+# Coverage
+coverage.xml
+.coverage.*
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
