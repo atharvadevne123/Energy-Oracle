@@ -136,11 +136,17 @@ def summarise_predictions(db: Session, limit: int = 100) -> dict[str, Any]:
     if not records:
         return {"count": 0}
     kwh_vals = [r.predicted_kwh for r in records]
+    zone_counts: dict[str, int] = {}
+    for r in records:
+        zone_counts[r.zone] = zone_counts.get(r.zone, 0) + 1
     return {
         "count": len(records),
         "kwh_mean": round(float(np.mean(kwh_vals)), 4),
         "kwh_std": round(float(np.std(kwh_vals)), 4),
         "kwh_min": round(float(np.min(kwh_vals)), 4),
         "kwh_max": round(float(np.max(kwh_vals)), 4),
+        "kwh_p50": round(float(np.percentile(kwh_vals, 50)), 4),
+        "kwh_p95": round(float(np.percentile(kwh_vals, 95)), 4),
         "zones": list({r.zone for r in records}),
+        "zone_counts": zone_counts,
     }
