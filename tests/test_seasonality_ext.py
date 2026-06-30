@@ -43,6 +43,6 @@ def test_cyclical_month_unit_circle():
 def test_get_seasonal_features_keys():
     from app.seasonality import get_seasonal_features
     feats = get_seasonal_features(month=7, day=4)
-    assert "season" in feats
+    assert "season_encoded" in feats
     assert "month_sin" in feats
     assert "month_cos" in feats

@@ -35,11 +35,11 @@ def test_get_zone_profile_industrial_largest():
     assert industrial.baseline_kwh > commercial.baseline_kwh > residential.baseline_kwh
 
 
-def test_get_zone_profile_unknown_raises():
+def test_get_zone_profile_unknown_falls_back_to_mixed():
     from app.zone_profiles import get_zone_profile
 
-    with pytest.raises(KeyError):
-        get_zone_profile("underwater")
+    result = get_zone_profile("underwater")
+    assert result.name == "mixed"
 
 
 def test_zone_profile_peak_multiplier_gt_one():

@@ -4,6 +4,19 @@ from __future__ import annotations
 
 import pytest
 
+# fpdf2 requires cryptography which uses a Rust extension that panics in some environments.
+# Probe at module level and skip the entire file if unavailable.
+try:
+    import fpdf as _fpdf_mod  # noqa: F401
+    _FPDF_AVAILABLE = True
+except BaseException:
+    _FPDF_AVAILABLE = False
+
+pytestmark = pytest.mark.skipif(
+    not _FPDF_AVAILABLE,
+    reason="fpdf unavailable or cryptography backend broken in this environment",
+)
+
 
 @pytest.fixture()
 def sample_summary():
@@ -27,7 +40,6 @@ def sample_drift():
 
 
 def test_generate_report_returns_path(tmp_path, sample_summary, sample_drift):
-    pytest.importorskip("fpdf")
     from app.report import generate_monitoring_report
 
     out = tmp_path / "report.pdf"
@@ -38,7 +50,6 @@ def test_generate_report_returns_path(tmp_path, sample_summary, sample_drift):
 
 
 def test_generate_report_creates_parent_dir(tmp_path, sample_summary, sample_drift):
-    pytest.importorskip("fpdf")
     from app.report import generate_monitoring_report
 
     out = tmp_path / "subdir" / "report.pdf"
@@ -48,7 +59,6 @@ def test_generate_report_creates_parent_dir(tmp_path, sample_summary, sample_dri
 
 
 def test_generate_report_drift_detected(tmp_path, sample_summary):
-    pytest.importorskip("fpdf")
     from app.report import generate_monitoring_report
 
     drift = {
@@ -63,7 +73,6 @@ def test_generate_report_drift_detected(tmp_path, sample_summary):
 
 
 def test_generate_report_empty_summary(tmp_path, sample_drift):
-    pytest.importorskip("fpdf")
     from app.report import generate_monitoring_report
 
     out = tmp_path / "empty_report.pdf"
@@ -72,9 +81,10 @@ def test_generate_report_empty_summary(tmp_path, sample_drift):
 
 
 def test_generate_report_no_features(tmp_path, sample_summary):
-    pytest.importorskip("fpdf")
     from app.report import generate_monitoring_report
 
     out = tmp_path / "nofeat_report.pdf"
-    result = generate_monitoring_report(sample_summary, {"status": "insufficient_data"}, output_path=out)
+    result = generate_monitoring_report(
+        sample_summary, {"status": "insufficient_data"}, output_path=out
+    )
     assert result.exists()

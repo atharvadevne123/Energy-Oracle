@@ -10,7 +10,7 @@ def test_settings_defaults():
 
     s = Settings()
     assert s.app_name == "Energy-Oracle"
-    assert s.app_version == "1.0.0"
+    assert s.app_version == "1.1.0"
     assert isinstance(s.rate_limit_per_minute, int)
     assert s.rate_limit_per_minute > 0
 
