@@ -55,12 +55,16 @@ def run_benchmark(url: str, n: int) -> dict[str, object]:
     p95_idx = int(0.95 * len(latencies_sorted))
     p99_idx = int(0.99 * len(latencies_sorted))
 
+    n_success = len(latencies)
     return {
         "n_requests": n,
         "n_errors": errors,
+        "n_success": n_success,
+        "success_rate_pct": round(100.0 * n_success / n, 1),
         "min_ms": round(min(latencies), 2),
         "max_ms": round(max(latencies), 2),
         "mean_ms": round(statistics.mean(latencies), 2),
+        "stddev_ms": round(statistics.stdev(latencies) if len(latencies) > 1 else 0.0, 2),
         "p95_ms": round(latencies_sorted[p95_idx], 2),
         "p99_ms": round(latencies_sorted[p99_idx], 2),
     }
