@@ -10,6 +10,10 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+__all__ = ['cached_predict', 'clear_cache', 'cache_stats']
+
+
+
 _prediction_cache: OrderedDict[str, float] = OrderedDict()
 _CACHE_MAX_SIZE = 512
 

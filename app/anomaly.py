@@ -10,6 +10,10 @@ from sklearn.ensemble import IsolationForest
 
 logger = logging.getLogger(__name__)
 
+__all__ = ['fit_anomaly_detector', 'score_prediction', 'generate_reference_samples']
+
+
+
 # Contamination rate — expected fraction of anomalies in training data
 DEFAULT_CONTAMINATION = 0.05
 _anomaly_detector: IsolationForest | None = None

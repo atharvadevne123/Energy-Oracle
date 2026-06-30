@@ -8,6 +8,10 @@ from typing import ClassVar
 
 logger = logging.getLogger(__name__)
 
+__all__ = ['ZoneProfile', 'get_zone_profile', 'expected_kwh']
+
+
+
 
 @dataclass(frozen=True)
 class ZoneProfile:

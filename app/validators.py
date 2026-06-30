@@ -7,6 +7,10 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+__all__ = ['validate_predict_input']
+
+
+
 VALID_ZONES = frozenset({"residential", "commercial", "industrial", "mixed"})
 HOUR_RANGE = range(0, 24)
 DOW_RANGE = range(0, 7)

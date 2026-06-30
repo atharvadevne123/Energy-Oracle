@@ -8,6 +8,10 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+__all__ = ['FeatureStore', 'put', 'get', 'delete', 'evict_expired', 'size']
+
+
+
 # TTL in seconds for feature store entries
 DEFAULT_TTL = 3600
 
