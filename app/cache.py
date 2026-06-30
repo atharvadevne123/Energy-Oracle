@@ -5,11 +5,12 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+from collections import OrderedDict
 from typing import Any
 
 logger = logging.getLogger(__name__)
 
-_prediction_cache: dict[str, float] = {}
+_prediction_cache: OrderedDict[str, float] = OrderedDict()
 _CACHE_MAX_SIZE = 512
 
 
@@ -23,21 +24,24 @@ def cached_predict(data: dict[str, Any], predict_fn: Any) -> tuple[float, bool]:
     """
     Return a cached prediction if available, otherwise call predict_fn.
 
+    Uses an OrderedDict to implement true LRU eviction — the least recently
+    used entry is removed when the cache exceeds _CACHE_MAX_SIZE.
+
     Returns:
         Tuple of (predicted_kwh, cache_hit).
     """
     key = _make_cache_key(data)
     if key in _prediction_cache:
+        _prediction_cache.move_to_end(key)
         logger.debug("Cache hit key=%s", key)
         return _prediction_cache[key], True
 
     result = predict_fn(data)
-    if len(_prediction_cache) >= _CACHE_MAX_SIZE:
-        # Evict oldest 10 % on overflow
-        evict = list(_prediction_cache.keys())[: _CACHE_MAX_SIZE // 10]
-        for k in evict:
-            del _prediction_cache[k]
     _prediction_cache[key] = result
+    _prediction_cache.move_to_end(key)
+    if len(_prediction_cache) > _CACHE_MAX_SIZE:
+        evicted_key, _ = _prediction_cache.popitem(last=False)
+        logger.debug("LRU eviction key=%s", evicted_key)
     logger.debug("Cache miss key=%s — stored result %.4f", key, result)
     return result, False
 
