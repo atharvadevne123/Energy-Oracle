@@ -50,5 +50,11 @@ def seed(n: int = 200) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Seed Energy-Oracle database")
     parser.add_argument("--n", type=int, default=200, help="Number of records to insert")
+    parser.add_argument(
+        "--zone",
+        choices=ZONES + ["all"],
+        default="all",
+        help="Restrict seeding to a specific zone (default: all zones)",
+    )
     args = parser.parse_args()
     seed(args.n)
