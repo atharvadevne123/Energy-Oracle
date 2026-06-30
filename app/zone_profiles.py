@@ -8,7 +8,7 @@ from typing import ClassVar
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['ZoneProfile', 'get_zone_profile', 'expected_kwh']
+__all__ = ['ZoneProfile', 'get_zone_profile', 'ALL_ZONES', 'RESIDENTIAL', 'COMMERCIAL', 'INDUSTRIAL', 'MIXED']
 
 
 

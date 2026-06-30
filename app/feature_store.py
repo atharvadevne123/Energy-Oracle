@@ -8,7 +8,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['FeatureStore', 'put', 'get', 'delete', 'evict_expired', 'size']
+__all__ = ['FeatureStore', 'feature_store']
 
 
 
