@@ -64,3 +64,52 @@ class DriftResponse(BaseModel):
     features: dict[str, Any] | None = Field(None, description="Per-feature KS-test results")
     reference_window: int | None = Field(None, description="Number of reference samples")
     current_window: int | None = Field(None, description="Number of current samples")
+
+
+class BatchPredictItem(BaseModel):
+    """Single record in a batch prediction request."""
+
+    zone: str = Field(..., description="Zone type: residential | commercial | industrial | mixed")
+    hour: int = Field(..., ge=0, le=23, description="Hour of day (0–23)")
+    day_of_week: int = Field(..., ge=0, le=6, description="Day of week (0=Mon, 6=Sun)")
+    temperature: float = Field(..., ge=-20.0, le=50.0, description="Ambient temperature in °C")
+    humidity: float = Field(..., ge=0.0, le=100.0, description="Relative humidity (0–100 %)")
+
+    @field_validator("zone")
+    @classmethod
+    def validate_zone(cls, v: str) -> str:
+        """Normalise and validate zone identifier."""
+        allowed = {"residential", "commercial", "industrial", "mixed"}
+        v = v.lower().strip()
+        if v not in allowed:
+            raise ValueError(f"zone must be one of {sorted(allowed)}")
+        return v
+
+
+class BatchPredictRequest(BaseModel):
+    """Input schema for bulk prediction endpoint."""
+
+    records: list[BatchPredictItem] = Field(..., description="List of prediction inputs (max 1000)")
+
+
+class BatchPredictResultItem(BaseModel):
+    """Result for a single record in a batch prediction response."""
+
+    predicted_kwh: float | None = Field(None, description="Predicted kWh, None if record errored")
+    error: str | None = Field(None, description="Error message if prediction failed")
+
+
+class BatchPredictResponse(BaseModel):
+    """Bulk prediction output schema."""
+
+    results: list[dict[str, Any]] = Field(..., description="Per-record results with predicted_kwh")
+    total: int = Field(..., description="Total records submitted")
+    successful: int = Field(..., description="Records successfully predicted")
+
+
+class VersionResponse(BaseModel):
+    """Application version metadata."""
+
+    name: str = Field(..., description="Application name")
+    version: str = Field(..., description="Semantic version")
+    model_version: str = Field(..., description="Currently loaded model version")
