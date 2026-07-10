@@ -6,7 +6,7 @@ from __future__ import annotations
 def test_n_features_matches_feature_columns():
     from app.features import FEATURE_COLUMNS, N_FEATURES
 
-    assert N_FEATURES == len(FEATURE_COLUMNS)
+    assert len(FEATURE_COLUMNS) == N_FEATURES
     assert N_FEATURES == 26
 
 

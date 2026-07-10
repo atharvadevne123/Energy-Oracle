@@ -141,7 +141,7 @@ def test_batch_predict_result_order_preserved():
         {"zone": "industrial", "hour": 20, "day_of_week": 5, "temperature": 30.0, "humidity": 70.0},
     ]
     results = batch_predict(records)
-    for i, (rec, res) in enumerate(zip(records, results)):
+    for i, (rec, res) in enumerate(zip(records, results, strict=False)):
         assert res["zone"] == rec["zone"], f"Result {i} zone mismatch"
 
 

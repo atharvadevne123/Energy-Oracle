@@ -78,7 +78,7 @@ def batch_predict(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
     valid_indices = [i for i, e in enumerate(parse_errors) if e is None]
     results: list[dict[str, Any]] = [
-        {**rec, "predicted_kwh": None, "error": err} for rec, err in zip(records, parse_errors)
+        {**rec, "predicted_kwh": None, "error": err} for rec, err in zip(records, parse_errors, strict=False)
     ]
 
     if valid_indices:
