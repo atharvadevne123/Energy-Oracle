@@ -27,7 +27,9 @@ def test_predict_request_zone_normalised_lowercase():
 
 
 def test_predict_request_zone_normalised_strip():
-    req = PredictRequest(zone="  commercial  ", hour=0, day_of_week=0, temperature=10.0, humidity=40.0)
+    req = PredictRequest(
+        zone="  commercial  ", hour=0, day_of_week=0, temperature=10.0, humidity=40.0
+    )
     assert req.zone == "commercial"
 
 
@@ -39,13 +41,17 @@ def test_predict_request_invalid_zone():
 @pytest.mark.parametrize("hour", [-1, 24, 100])
 def test_predict_request_invalid_hour(hour):
     with pytest.raises(ValidationError):
-        PredictRequest(zone="residential", hour=hour, day_of_week=3, temperature=20.0, humidity=55.0)
+        PredictRequest(
+            zone="residential", hour=hour, day_of_week=3, temperature=20.0, humidity=55.0
+        )
 
 
 @pytest.mark.parametrize("dow", [-1, 7, 10])
 def test_predict_request_invalid_day_of_week(dow):
     with pytest.raises(ValidationError):
-        PredictRequest(zone="residential", hour=12, day_of_week=dow, temperature=20.0, humidity=55.0)
+        PredictRequest(
+            zone="residential", hour=12, day_of_week=dow, temperature=20.0, humidity=55.0
+        )
 
 
 @pytest.mark.parametrize("temp", [-25.0, 55.0])
@@ -89,10 +95,24 @@ def test_version_response():
 
 
 def test_batch_predict_request_valid():
-    req = BatchPredictRequest(records=[
-        {"zone": "residential", "hour": 10, "day_of_week": 1, "temperature": 22.0, "humidity": 55.0},
-        {"zone": "commercial", "hour": 14, "day_of_week": 3, "temperature": 25.0, "humidity": 60.0},
-    ])
+    req = BatchPredictRequest(
+        records=[
+            {
+                "zone": "residential",
+                "hour": 10,
+                "day_of_week": 1,
+                "temperature": 22.0,
+                "humidity": 55.0,
+            },
+            {
+                "zone": "commercial",
+                "hour": 14,
+                "day_of_week": 3,
+                "temperature": 25.0,
+                "humidity": 60.0,
+            },
+        ]
+    )
     assert len(req.records) == 2
 
 

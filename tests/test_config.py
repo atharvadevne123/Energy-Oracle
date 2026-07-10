@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 
 def test_settings_defaults():
     from app.config import Settings
@@ -35,6 +33,7 @@ def test_settings_cors_origins_from_env(monkeypatch):
     from importlib import reload
 
     import app.config as cfg_module
+
     reload(cfg_module)
     s = cfg_module.Settings()
     assert "https://example.com" in s.cors_origins

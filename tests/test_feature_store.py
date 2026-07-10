@@ -10,6 +10,7 @@ import pytest
 @pytest.fixture
 def store():
     from app.feature_store import FeatureStore
+
     return FeatureStore(ttl=2)
 
 

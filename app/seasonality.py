@@ -8,8 +8,13 @@ from datetime import date
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['month_to_season', 'season_encoding', 'cyclical_month', 'is_public_holiday_approx', 'get_seasonal_features']
-
+__all__ = [
+    "month_to_season",
+    "season_encoding",
+    "cyclical_month",
+    "is_public_holiday_approx",
+    "get_seasonal_features",
+]
 
 
 # Approximate astronomical seasons (Northern Hemisphere)

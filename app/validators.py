@@ -7,7 +7,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['validate_predict_input', 'validate_batch_input', 'VALID_ZONES']
+__all__ = ["validate_predict_input", "validate_batch_input", "VALID_ZONES"]
 
 
 VALID_ZONES = frozenset({"residential", "commercial", "industrial", "mixed"})
@@ -66,8 +66,4 @@ def validate_batch_input(records: list[dict[str, Any]]) -> dict[int, list[str]]:
         Dict mapping record index to list of error messages for that record.
         Records with no errors are omitted.
     """
-    return {
-        i: errs
-        for i, rec in enumerate(records)
-        if (errs := validate_predict_input(rec))
-    }
+    return {i: errs for i, rec in enumerate(records) if (errs := validate_predict_input(rec))}

@@ -9,8 +9,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['increment', 'record_latency', 'get_counter', 'percentile', 'summary', 'reset']
-
+__all__ = ["increment", "record_latency", "get_counter", "percentile", "summary", "reset"]
 
 
 # In-process counters (replace with prometheus_client in production)
@@ -21,7 +20,11 @@ _start_time = time.time()
 
 def increment(name: str, labels: dict[str, str] | None = None) -> None:
     """Increment a named counter."""
-    key = name if not labels else f"{name}{{{','.join(f'{k}={v}' for k, v in sorted(labels.items()))}}}"
+    key = (
+        name
+        if not labels
+        else f"{name}{{{','.join(f'{k}={v}' for k, v in sorted(labels.items()))}}}"
+    )
     _counters[key] += 1
 
 

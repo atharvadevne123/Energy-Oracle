@@ -11,13 +11,15 @@ import urllib.request
 DEFAULT_URL = "http://localhost:8000/api/v1/predict"
 DEFAULT_N = 50
 
-PAYLOAD = json.dumps({
-    "zone": "commercial",
-    "hour": 14,
-    "day_of_week": 3,
-    "temperature": 22.5,
-    "humidity": 58.0,
-}).encode()
+PAYLOAD = json.dumps(
+    {
+        "zone": "commercial",
+        "hour": 14,
+        "day_of_week": 3,
+        "temperature": 22.5,
+        "humidity": 58.0,
+    }
+).encode()
 
 
 def run_benchmark(url: str, n: int) -> dict[str, object]:
@@ -36,7 +38,9 @@ def run_benchmark(url: str, n: int) -> dict[str, object]:
 
     for _i in range(n):
         req = urllib.request.Request(
-            url, data=PAYLOAD, method="POST",
+            url,
+            data=PAYLOAD,
+            method="POST",
             headers={"Content-Type": "application/json"},
         )
         t0 = time.perf_counter()

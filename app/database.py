@@ -11,7 +11,16 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["Base", "PredictionLog", "TrainingRun", "DriftEvent", "SessionLocal", "engine", "init_db", "get_db"]
+__all__ = [
+    "Base",
+    "PredictionLog",
+    "TrainingRun",
+    "DriftEvent",
+    "SessionLocal",
+    "engine",
+    "init_db",
+    "get_db",
+]
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./energy_oracle.db")
 
@@ -43,9 +52,7 @@ class PredictionLog(Base):
     model_version = Column(String(32), nullable=False, default="1.0.0")
     created_at = Column(DateTime, default=lambda: datetime.now(UTC), nullable=False)
 
-    __table_args__ = (
-        Index("ix_prediction_logs_zone_created_at", "zone", "created_at"),
-    )
+    __table_args__ = (Index("ix_prediction_logs_zone_created_at", "zone", "created_at"),)
 
     def __repr__(self) -> str:
         return (

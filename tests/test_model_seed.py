@@ -21,7 +21,6 @@ def test_different_seeds_produce_different_data():
 
 
 def test_synthetic_data_shape(tmp_path, monkeypatch):
-    from app import model as m
     from app.model import generate_synthetic_data
 
     df, y = generate_synthetic_data(n_samples=300, seed=42)

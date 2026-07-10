@@ -9,9 +9,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['generate_monitoring_report']
-
-
+__all__ = ["generate_monitoring_report"]
 
 
 def generate_monitoring_report(
@@ -68,9 +66,11 @@ def generate_monitoring_report(
         flag = "[DRIFT]" if detected else "[OK]"
         ks = stats.get("ks_statistic", 0)
         pdf.cell(
-            0, 6,
+            0,
+            6,
             f"  {flag} {feat}: KS={ks:.4f} p={stats.get('p_value', 1.0):.4f}",
-            new_x="LMARGIN", new_y="NEXT",
+            new_x="LMARGIN",
+            new_y="NEXT",
         )
 
     pdf.output(str(output_path))

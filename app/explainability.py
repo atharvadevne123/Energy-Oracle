@@ -11,7 +11,8 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 
-__all__ = ['get_feature_importances', 'top_k_features', 'explain_prediction']
+__all__ = ["get_feature_importances", "top_k_features", "explain_prediction"]
+
 
 def get_feature_importances(model_ensemble: dict[str, Any]) -> dict[str, float]:
     """
@@ -73,10 +74,11 @@ def explain_prediction(
     breakdown = []
     for feat, imp in sorted(importances.items(), key=lambda x: x[1], reverse=True)[:10]:
         val = row.get(feat, float("nan"))
-        breakdown.append({
-            "feature": feat,
-            "value": round(float(val), 4) if not np.isnan(float(val)) else None,
-            "importance": round(imp, 4),
-        })
+        breakdown.append(
+            {
+                "feature": feat,
+                "value": round(float(val), 4) if not np.isnan(float(val)) else None,
+                "importance": round(imp, 4),
+            }
+        )
     return breakdown
-

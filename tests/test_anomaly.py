@@ -8,12 +8,14 @@ import pytest
 @pytest.fixture
 def fitted_detector():
     from app.anomaly import fit_anomaly_detector, generate_reference_samples
+
     samples = generate_reference_samples(n=300)
     return fit_anomaly_detector(samples)
 
 
 def test_score_before_fitting_returns_not_ready():
     import app.anomaly as anomaly_mod
+
     # Reset detector
     anomaly_mod._anomaly_detector = None
     from app.anomaly import score_prediction
@@ -51,4 +53,5 @@ def test_generate_reference_samples_shape():
 
 def test_fit_returns_isolation_forest(fitted_detector):
     from sklearn.ensemble import IsolationForest
+
     assert isinstance(fitted_detector, IsolationForest)

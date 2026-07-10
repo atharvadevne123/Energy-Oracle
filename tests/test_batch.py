@@ -8,9 +8,11 @@ import pytest
 @pytest.fixture(autouse=True)
 def _train_model(tmp_path, monkeypatch):
     from app import model as m
+
     monkeypatch.setattr(m, "MODEL_PATH", tmp_path / "model.joblib")
     monkeypatch.setattr(m, "METRICS_PATH", tmp_path / "metrics.json")
     from app.model import generate_synthetic_data, train_model
+
     df, y = generate_synthetic_data(n_samples=200)
     train_model(df, y, cv_folds=2)
 
@@ -18,10 +20,15 @@ def _train_model(tmp_path, monkeypatch):
 def test_batch_predict_single_record():
     from app.batch import batch_predict
 
-    records = [{
-        "zone": "residential", "hour": 8, "day_of_week": 1,
-        "temperature": 20.0, "humidity": 55.0,
-    }]
+    records = [
+        {
+            "zone": "residential",
+            "hour": 8,
+            "day_of_week": 1,
+            "temperature": 20.0,
+            "humidity": 55.0,
+        }
+    ]
     results = batch_predict(records)
     assert len(results) == 1
     assert results[0]["predicted_kwh"] is not None
@@ -56,8 +63,20 @@ def test_batch_predict_validates_each_record():
     from app.batch import BatchPredictRequest
 
     records = [
-        {"zone": "residential", "hour": 10, "day_of_week": 2, "temperature": 20.0, "humidity": 55.0},
-        {"zone": "invalid_zone", "hour": 99, "day_of_week": 2, "temperature": 20.0, "humidity": 55.0},
+        {
+            "zone": "residential",
+            "hour": 10,
+            "day_of_week": 2,
+            "temperature": 20.0,
+            "humidity": 55.0,
+        },
+        {
+            "zone": "invalid_zone",
+            "hour": 99,
+            "day_of_week": 2,
+            "temperature": 20.0,
+            "humidity": 55.0,
+        },
     ]
     req = BatchPredictRequest(records)
     errors = req.validate()

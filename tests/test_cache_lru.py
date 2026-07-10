@@ -8,6 +8,7 @@ import pytest
 @pytest.fixture(autouse=True)
 def _clear_cache():
     from app.cache import clear_cache
+
     clear_cache()
     yield
     clear_cache()
@@ -22,7 +23,13 @@ def test_cache_miss_calls_predict_fn():
         calls.append(data)
         return 42.0
 
-    data = {"zone": "residential", "hour": 8, "day_of_week": 1, "temperature": 20.0, "humidity": 50.0}
+    data = {
+        "zone": "residential",
+        "hour": 8,
+        "day_of_week": 1,
+        "temperature": 20.0,
+        "humidity": 50.0,
+    }
     result, hit = cached_predict(data, predict_fn)
     assert result == 42.0
     assert hit is False
@@ -38,7 +45,13 @@ def test_cache_hit_skips_predict_fn():
         calls.append(data)
         return 99.0
 
-    data = {"zone": "commercial", "hour": 12, "day_of_week": 2, "temperature": 22.0, "humidity": 55.0}
+    data = {
+        "zone": "commercial",
+        "hour": 12,
+        "day_of_week": 2,
+        "temperature": 22.0,
+        "humidity": 55.0,
+    }
     cached_predict(data, predict_fn)
     result, hit = cached_predict(data, predict_fn)
     assert result == 99.0
@@ -53,7 +66,10 @@ def test_cache_lru_eviction():
         return float(data["hour"])
 
     for i in range(CACHE_MAX_SIZE + 5):
-        cached_predict({"hour": i, "zone": "mixed", "day_of_week": 0, "temperature": 20.0, "humidity": 50.0}, predict_fn)
+        cached_predict(
+            {"hour": i, "zone": "mixed", "day_of_week": 0, "temperature": 20.0, "humidity": 50.0},
+            predict_fn,
+        )
 
     stats = cache_stats()
     assert stats["size"] <= CACHE_MAX_SIZE
@@ -70,7 +86,10 @@ def test_clear_cache_returns_count():
     from app.cache import cached_predict, clear_cache
 
     for i in range(3):
-        cached_predict({"hour": i, "zone": "mixed", "day_of_week": 0, "temperature": 20.0, "humidity": 50.0}, lambda d: 1.0)
+        cached_predict(
+            {"hour": i, "zone": "mixed", "day_of_week": 0, "temperature": 20.0, "humidity": 50.0},
+            lambda d: 1.0,
+        )
 
     n = clear_cache()
     assert n == 3

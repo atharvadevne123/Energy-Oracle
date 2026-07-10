@@ -10,8 +10,7 @@ from sklearn.ensemble import IsolationForest
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['fit_anomaly_detector', 'score_prediction', 'generate_reference_samples']
-
+__all__ = ["fit_anomaly_detector", "score_prediction", "generate_reference_samples"]
 
 
 # Contamination rate — expected fraction of anomalies in training data
@@ -75,7 +74,10 @@ def score_prediction(
     if is_anomaly:
         logger.warning(
             "Anomaly detected — temp=%.1f hum=%.1f kwh=%.2f score=%.4f",
-            temperature, humidity, predicted_kwh, score,
+            temperature,
+            humidity,
+            predicted_kwh,
+            score,
         )
 
     return {

@@ -10,6 +10,7 @@ import pytest
 @pytest.fixture()
 def patched_model(tmp_path, monkeypatch):
     from app import model as m
+
     monkeypatch.setattr(m, "MODEL_PATH", tmp_path / "model.joblib")
     monkeypatch.setattr(m, "METRICS_PATH", tmp_path / "metrics.json")
     monkeypatch.chdir(tmp_path)
@@ -64,6 +65,7 @@ def test_retrain_history_has_unique_run_ids(patched_model):
 
 def test_retrain_retrained_at_is_iso_string(patched_model):
     from datetime import datetime
+
     from pipelines.retrain_dag import retrain
 
     metrics = retrain(n_samples=200, cv_folds=2)

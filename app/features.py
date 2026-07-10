@@ -13,10 +13,18 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 logger = logging.getLogger(__name__)
 
 __all__ = [
-    "ZONE_CATEGORIES", "ZONE_BASELINES", "FEATURE_COLUMNS", "N_FEATURES",
-    "add_time_features", "add_lag_features", "add_rolling_features",
-    "add_ratio_features", "encode_zone", "build_feature_matrix",
-    "build_sklearn_pipeline", "single_row_to_df",
+    "ZONE_CATEGORIES",
+    "ZONE_BASELINES",
+    "FEATURE_COLUMNS",
+    "N_FEATURES",
+    "add_time_features",
+    "add_lag_features",
+    "add_rolling_features",
+    "add_ratio_features",
+    "encode_zone",
+    "build_feature_matrix",
+    "build_sklearn_pipeline",
+    "single_row_to_df",
 ]
 
 
@@ -65,12 +73,8 @@ def add_rolling_features(df: pd.DataFrame, windows: list[int] | None = None) -> 
         windows = [3, 6, 12]
     df = df.copy()
     for w in windows:
-        df[f"temp_rolling_mean_{w}"] = (
-            df["temperature"].rolling(w, min_periods=1).mean()
-        )
-        df[f"temp_rolling_std_{w}"] = (
-            df["temperature"].rolling(w, min_periods=1).std().fillna(0)
-        )
+        df[f"temp_rolling_mean_{w}"] = df["temperature"].rolling(w, min_periods=1).mean()
+        df[f"temp_rolling_std_{w}"] = df["temperature"].rolling(w, min_periods=1).std().fillna(0)
     return df
 
 
@@ -96,16 +100,32 @@ def encode_zone(df: pd.DataFrame) -> pd.DataFrame:
 
 
 FEATURE_COLUMNS: list[str] = [
-    "hour_sin", "hour_cos", "dow_sin", "dow_cos",
-    "is_weekend", "is_peak_hour", "is_off_peak",
-    "temperature", "humidity",
-    "heat_index", "temp_humidity_ratio", "temp_squared",
-    "temp_per_baseline", "zone_encoded",
-    "temp_lag_1", "temp_lag_2", "temp_lag_3",
-    "humidity_lag_1", "humidity_lag_2", "humidity_lag_3",
-    "temp_rolling_mean_3", "temp_rolling_std_3",
-    "temp_rolling_mean_6", "temp_rolling_std_6",
-    "temp_rolling_mean_12", "temp_rolling_std_12",
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "is_peak_hour",
+    "is_off_peak",
+    "temperature",
+    "humidity",
+    "heat_index",
+    "temp_humidity_ratio",
+    "temp_squared",
+    "temp_per_baseline",
+    "zone_encoded",
+    "temp_lag_1",
+    "temp_lag_2",
+    "temp_lag_3",
+    "humidity_lag_1",
+    "humidity_lag_2",
+    "humidity_lag_3",
+    "temp_rolling_mean_3",
+    "temp_rolling_std_3",
+    "temp_rolling_mean_6",
+    "temp_rolling_std_6",
+    "temp_rolling_mean_12",
+    "temp_rolling_std_12",
 ]
 
 

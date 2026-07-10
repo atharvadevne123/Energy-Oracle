@@ -14,8 +14,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['upload_model', 'download_training_data']
-
+__all__ = ["upload_model", "download_training_data"]
 
 
 S3_BUCKET = os.getenv("S3_BUCKET", "energy-oracle-artifacts")

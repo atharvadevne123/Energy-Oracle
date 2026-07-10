@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 MAX_BATCH_SIZE = 1000
 
-__all__ = ['BatchPredictRequest', 'batch_predict', 'MAX_BATCH_SIZE']
+__all__ = ["BatchPredictRequest", "batch_predict", "MAX_BATCH_SIZE"]
 
 
 class BatchPredictRequest:
@@ -62,21 +62,24 @@ def batch_predict(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     parse_errors: list[str | None] = []
     for rec in records:
         try:
-            rows.append({
-                "zone": str(rec["zone"]),
-                "hour": int(rec["hour"]),
-                "day_of_week": int(rec["day_of_week"]),
-                "temperature": float(rec["temperature"]),
-                "humidity": float(rec["humidity"]),
-            })
+            rows.append(
+                {
+                    "zone": str(rec["zone"]),
+                    "hour": int(rec["hour"]),
+                    "day_of_week": int(rec["day_of_week"]),
+                    "temperature": float(rec["temperature"]),
+                    "humidity": float(rec["humidity"]),
+                }
+            )
             parse_errors.append(None)
         except (KeyError, TypeError, ValueError) as exc:
             rows.append({})
             parse_errors.append(str(exc))
 
     valid_indices = [i for i, e in enumerate(parse_errors) if e is None]
-    results: list[dict[str, Any]] = [{**rec, "predicted_kwh": None, "error": err}
-                                      for rec, err in zip(records, parse_errors)]
+    results: list[dict[str, Any]] = [
+        {**rec, "predicted_kwh": None, "error": err} for rec, err in zip(records, parse_errors)
+    ]
 
     if valid_indices:
         try:

@@ -8,6 +8,7 @@ import pytest
 @pytest.fixture(autouse=True)
 def _reset_metrics():
     from app.metrics_store import reset
+
     reset()
     yield
     reset()

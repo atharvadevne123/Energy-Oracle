@@ -26,7 +26,15 @@ MODEL_PATH = Path(os.getenv("MODEL_PATH", "model.joblib"))
 METRICS_PATH = Path(os.getenv("METRICS_PATH", "metrics.json"))
 MODEL_VERSION = "1.0.0"
 
-__all__ = ["generate_synthetic_data", "train_model", "load_model", "predict", "load_metrics", "MODEL_PATH", "MODEL_VERSION"]
+__all__ = [
+    "generate_synthetic_data",
+    "train_model",
+    "load_model",
+    "predict",
+    "load_metrics",
+    "MODEL_PATH",
+    "MODEL_VERSION",
+]
 
 _model_cache: dict[str, Pipeline] | None = None
 
@@ -58,7 +66,9 @@ def _make_rf() -> RandomForestRegressor:
     )
 
 
-def generate_synthetic_data(n_samples: int = 5000, seed: int = 42) -> tuple[pd.DataFrame, pd.Series]:
+def generate_synthetic_data(
+    n_samples: int = 5000, seed: int = 42
+) -> tuple[pd.DataFrame, pd.Series]:
     """
     Generate realistic synthetic energy consumption data.
 
@@ -81,8 +91,13 @@ def generate_synthetic_data(n_samples: int = 5000, seed: int = 42) -> tuple[pd.D
     kwh = (base + temp_effect + peak_surge + weekend_drop + noise).clip(min=0.5)
 
     df = pd.DataFrame(
-        {"zone": zones, "hour": hours, "day_of_week": days,
-         "temperature": temps, "humidity": humidity}
+        {
+            "zone": zones,
+            "hour": hours,
+            "day_of_week": days,
+            "temperature": temps,
+            "humidity": humidity,
+        }
     )
     target = pd.Series(kwh, name="kwh")
     return df, target
@@ -131,9 +146,7 @@ def train_model(
     global _model_cache
     _model_cache = {"lgbm": lgbm_pipe, "rf": rf_pipe}
 
-    logger.info(
-        "Training complete — RMSE %.4f ± %.4f", metrics["rmse_mean"], metrics["rmse_std"]
-    )
+    logger.info("Training complete — RMSE %.4f ± %.4f", metrics["rmse_mean"], metrics["rmse_std"])
     return lgbm_pipe, metrics
 
 

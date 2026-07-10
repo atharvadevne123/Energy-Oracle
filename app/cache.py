@@ -10,7 +10,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['cached_predict', 'clear_cache', 'cache_stats', 'CACHE_MAX_SIZE']
+__all__ = ["cached_predict", "clear_cache", "cache_stats", "CACHE_MAX_SIZE"]
 
 CACHE_MAX_SIZE = 512
 

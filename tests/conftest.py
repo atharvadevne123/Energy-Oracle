@@ -15,9 +15,7 @@ TEST_DB_URL = "sqlite:///./test_energy_oracle.db"
 
 @pytest.fixture(scope="session")
 def test_engine():
-    engine = create_engine(
-        TEST_DB_URL, connect_args={"check_same_thread": False}
-    )
+    engine = create_engine(TEST_DB_URL, connect_args={"check_same_thread": False})
     Base.metadata.create_all(bind=engine)
     yield engine
     Base.metadata.drop_all(bind=engine)
@@ -25,9 +23,7 @@ def test_engine():
 
 @pytest.fixture(scope="function")
 def db_session(test_engine):
-    TestingSessionLocal = sessionmaker(
-        autocommit=False, autoflush=False, bind=test_engine
-    )
+    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
     session = TestingSessionLocal()
     yield session
     session.rollback()
@@ -84,6 +80,7 @@ def industrial_payload():
 @pytest.fixture
 def reference_series():
     import numpy as np
+
     rng = np.random.default_rng(0)
     return rng.normal(50, 10, 200).tolist()
 
@@ -91,6 +88,7 @@ def reference_series():
 @pytest.fixture
 def current_series_stable():
     import numpy as np
+
     rng = np.random.default_rng(1)
     return rng.normal(50, 10, 50).tolist()
 
@@ -98,6 +96,7 @@ def current_series_stable():
 @pytest.fixture
 def current_series_drifted():
     import numpy as np
+
     rng = np.random.default_rng(2)
     return rng.normal(80, 15, 50).tolist()
 

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 
 def test_check_database_ok(tmp_path):
     from app.health import check_database
@@ -22,6 +20,7 @@ def test_check_database_bad_url():
 
 def test_check_model_ok(tmp_path):
     import joblib
+
     from app.health import check_model
 
     model_path = tmp_path / "model.joblib"
@@ -40,6 +39,7 @@ def test_check_model_missing(tmp_path):
 
 def test_full_health_report_structure(tmp_path):
     import joblib
+
     from app.health import full_health_report
 
     model_path = tmp_path / "model.joblib"

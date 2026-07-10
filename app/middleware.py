@@ -14,7 +14,7 @@ from fastapi.responses import JSONResponse
 logger = logging.getLogger(__name__)
 
 
-__all__ = ['CorrelationIDMiddleware', 'rate_limit_middleware']
+__all__ = ["CorrelationIDMiddleware", "rate_limit_middleware"]
 # Per-IP sliding-window request store
 _rate_store: dict[str, list[float]] = {}
 
@@ -69,4 +69,3 @@ async def rate_limit_middleware(
         )
     _rate_store[client_ip].append(now)
     return await call_next(request)
-

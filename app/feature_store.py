@@ -8,8 +8,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['FeatureStore', 'feature_store']
-
+__all__ = ["FeatureStore", "feature_store"]
 
 
 # TTL in seconds for feature store entries

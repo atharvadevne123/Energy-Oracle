@@ -8,6 +8,7 @@ import pytest
 # Probe at module level and skip the entire file if unavailable.
 try:
     import fpdf as _fpdf_mod  # noqa: F401
+
     _FPDF_AVAILABLE = True
 except BaseException:
     _FPDF_AVAILABLE = False

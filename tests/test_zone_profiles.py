@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 
 def test_all_zones_available():
     from app.zone_profiles import ALL_ZONES

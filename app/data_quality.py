@@ -11,7 +11,7 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 
-__all__ = ['check_missing_values', 'check_outliers', 'validate_training_dataframe']
+__all__ = ["check_missing_values", "check_outliers", "validate_training_dataframe"]
 EXPECTED_DTYPES: dict[str, type] = {
     "zone": str,
     "hour": int,
@@ -62,7 +62,9 @@ def validate_training_dataframe(df: pd.DataFrame, target: pd.Series) -> dict[str
     missing = check_missing_values(df)
     total_missing = sum(missing.values())
     if total_missing > 0:
-        warnings.append(f"{total_missing} missing values found across {sum(1 for v in missing.values() if v > 0)} columns.")
+        warnings.append(
+            f"{total_missing} missing values found across {sum(1 for v in missing.values() if v > 0)} columns."
+        )
 
     if len(df) != len(target):
         warnings.append(f"Feature rows ({len(df)}) != target rows ({len(target)}).")
@@ -86,4 +88,3 @@ def validate_training_dataframe(df: pd.DataFrame, target: pd.Series) -> dict[str
         "warnings": warnings,
         "quality_ok": len(warnings) == 0,
     }
-

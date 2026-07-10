@@ -14,7 +14,14 @@ from app.database import DriftEvent, PredictionLog
 logger = logging.getLogger(__name__)
 
 # Minimum window size required for a meaningful KS-test
-__all__ = ["compute_drift", "log_prediction", "get_recent_predictions", "run_drift_check", "summarise_predictions", "MIN_WINDOW_FOR_DRIFT"]
+__all__ = [
+    "compute_drift",
+    "log_prediction",
+    "get_recent_predictions",
+    "run_drift_check",
+    "summarise_predictions",
+    "MIN_WINDOW_FOR_DRIFT",
+]
 
 MIN_WINDOW_FOR_DRIFT = 30
 
@@ -40,9 +47,7 @@ def compute_drift(reference: list[float], current: list[float]) -> dict[str, Any
         "drift_detected": bool(p < 0.05),
     }
     if result["drift_detected"]:
-        logger.warning(
-            "Drift detected — KS=%.4f p=%.4f", result["ks_statistic"], result["p_value"]
-        )
+        logger.warning("Drift detected — KS=%.4f p=%.4f", result["ks_statistic"], result["p_value"])
     return result
 
 
@@ -78,15 +83,12 @@ def log_prediction(
 
 def get_recent_predictions(db: Session, limit: int = 500) -> list[PredictionLog]:
     """Fetch the most recent prediction records for drift analysis."""
-    return (
-        db.query(PredictionLog)
-        .order_by(PredictionLog.created_at.desc())
-        .limit(limit)
-        .all()
-    )
+    return db.query(PredictionLog).order_by(PredictionLog.created_at.desc()).limit(limit).all()
 
 
-def run_drift_check(db: Session, reference_window: int = 200, current_window: int = 50) -> dict[str, Any]:
+def run_drift_check(
+    db: Session, reference_window: int = 200, current_window: int = 50
+) -> dict[str, Any]:
     """
     Compare recent predictions against a reference window.
 

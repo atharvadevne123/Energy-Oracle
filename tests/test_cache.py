@@ -14,7 +14,13 @@ def test_cache_hit_on_repeat_call():
         call_count += 1
         return 42.0
 
-    data = {"zone": "residential", "hour": 10, "day_of_week": 2, "temperature": 20.0, "humidity": 50.0}
+    data = {
+        "zone": "residential",
+        "hour": 10,
+        "day_of_week": 2,
+        "temperature": 20.0,
+        "humidity": 50.0,
+    }
     result1, hit1 = cached_predict(data, mock_predict)
     result2, hit2 = cached_predict(data, mock_predict)
 
@@ -36,7 +42,13 @@ def test_different_inputs_different_cache_entries():
         return float(counter[0] * 10)
 
     for hour in [8, 12, 18]:
-        data = {"zone": "commercial", "hour": hour, "day_of_week": 1, "temperature": 22.0, "humidity": 60.0}
+        data = {
+            "zone": "commercial",
+            "hour": hour,
+            "day_of_week": 1,
+            "temperature": 22.0,
+            "humidity": 60.0,
+        }
         result, _ = cached_predict(data, mock_predict)
         results.append(result)
 

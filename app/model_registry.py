@@ -11,7 +11,7 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 
-__all__ = ['register_model', 'load_registry', 'get_production_model', 'promote', 'REGISTRY_PATH']
+__all__ = ["register_model", "load_registry", "get_production_model", "promote", "REGISTRY_PATH"]
 REGISTRY_PATH = Path("model_registry.json")
 
 
@@ -83,4 +83,3 @@ def promote(version: str) -> bool:
         REGISTRY_PATH.write_text(json.dumps(registry, indent=2))
         logger.info("Promoted model version=%s", version)
     return found
-

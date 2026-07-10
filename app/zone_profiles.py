@@ -8,9 +8,15 @@ from typing import ClassVar
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['ZoneProfile', 'get_zone_profile', 'ALL_ZONES', 'RESIDENTIAL', 'COMMERCIAL', 'INDUSTRIAL', 'MIXED']
-
-
+__all__ = [
+    "ZoneProfile",
+    "get_zone_profile",
+    "ALL_ZONES",
+    "RESIDENTIAL",
+    "COMMERCIAL",
+    "INDUSTRIAL",
+    "MIXED",
+]
 
 
 @dataclass(frozen=True)
@@ -40,7 +46,7 @@ class ZoneProfile:
             base = self.baseline_kwh
 
         if is_weekend:
-            base *= (1 + self.weekend_adjustment)
+            base *= 1 + self.weekend_adjustment
 
         temp_delta = temperature - 18.0
         base += temp_delta * self.typical_temp_sensitivity

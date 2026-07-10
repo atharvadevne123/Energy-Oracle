@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 
 def test_correlation_id_generated_if_absent(client):
     response = client.get("/api/v1/health")
@@ -30,11 +28,13 @@ def test_correlation_id_unique_per_request(client):
 
 def test_rate_limit_middleware_imports():
     from app.middleware import rate_limit_middleware
+
     assert callable(rate_limit_middleware)
 
 
 def test_correlation_middleware_imports():
     from app.middleware import CorrelationIDMiddleware
+
     assert CorrelationIDMiddleware is not None
 
 
@@ -48,4 +48,5 @@ def test_correlation_id_in_predict_response(client, sample_predict_payload):
 
 def test_rate_store_initialises_empty():
     from app.middleware import _rate_store
+
     assert isinstance(_rate_store, dict)

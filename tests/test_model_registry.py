@@ -8,6 +8,7 @@ import pytest
 @pytest.fixture
 def registry_path(tmp_path, monkeypatch):
     import app.model_registry as reg_mod
+
     monkeypatch.setattr(reg_mod, "REGISTRY_PATH", tmp_path / "registry.json")
     return tmp_path / "registry.json"
 
@@ -23,6 +24,7 @@ def test_register_creates_entry(registry_path):
 
 def test_load_empty_registry(registry_path):
     from app.model_registry import load_registry
+
     assert load_registry() == []
 
 
@@ -52,9 +54,11 @@ def test_promote_demotes_others(registry_path):
 
 def test_promote_nonexistent_returns_false(registry_path):
     from app.model_registry import promote
+
     assert not promote("99.0.0")
 
 
 def test_get_production_empty(registry_path):
     from app.model_registry import get_production_model
+
     assert get_production_model() is None
